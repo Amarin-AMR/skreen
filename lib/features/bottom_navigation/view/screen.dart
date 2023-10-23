@@ -6,27 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:skreen/features/camera/view/screen.dart';
 import 'package:skreen/features/gallery/view/screen.dart';
 
-class BottomNavigationBarApp extends StatelessWidget {
+class BottomNavigationBarApp extends StatefulWidget {
   const BottomNavigationBarApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: BottomNavigationBarExample(),
-    );
-  }
+  State<BottomNavigationBarApp> createState() => _BottomNavigationBarAppState();
 }
 
-class BottomNavigationBarExample extends StatefulWidget {
-  const BottomNavigationBarExample({super.key});
-
-  @override
-  State<BottomNavigationBarExample> createState() =>
-      _BottomNavigationBarExampleState();
-}
-
-class _BottomNavigationBarExampleState
-    extends State<BottomNavigationBarExample> {
+class _BottomNavigationBarAppState extends State<BottomNavigationBarApp> {
   late CameraDescription cameraDescription;
   int _selectedIndex = 0;
   List<Widget>? _widgetOptions;
