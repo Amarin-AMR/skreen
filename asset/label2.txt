@@ -1,0 +1,7 @@
+Melanocytic nevi (nv)
+Melanoma (mel)
+Benign keratosis-like lesions (bkl)
+Basal cell carcinoma (bcc)
+Actinic keratoses (akiec)
+Vascular lesions (vasc)
+Dermatofibroma (df)
