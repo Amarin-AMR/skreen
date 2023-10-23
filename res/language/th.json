@@ -1,0 +1,15 @@
+{
+    "app": {
+        "title": "Skeen",
+        "changeLang": "เปลี่ยนภาษา",
+        "bottomNavigation": {
+            "gallery": "หน้าแกลเลอรี่",
+            "camera": "ตรวจจับแบบ real time"
+        },
+        "gallery": {
+            "photo": "ถ่ายภาพ",
+            "imagePicker": "เลือกจากคลังรูปภาพ",
+            "title": "ถ่ายภาพหรือเลือกจากคลังรูปภาพ เพื่อที่จะวินิจฉัยโรคคร่าว ๆ"
+        }
+    }
+}

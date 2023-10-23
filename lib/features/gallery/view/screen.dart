@@ -15,6 +15,7 @@
  */
 
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
@@ -94,7 +95,12 @@ class _GalleryScreenState extends State<GalleryScreen> {
                     Icons.camera,
                     size: 48,
                   ),
-                  label: const Text("Take a photo"),
+                  label: Text(
+                    tr('app.gallery.photo'),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.inverseSurface,
+                    ),
+                  ),
                 ),
               TextButton.icon(
                 onPressed: () async {
@@ -111,7 +117,12 @@ class _GalleryScreenState extends State<GalleryScreen> {
                   Icons.photo,
                   size: 48,
                 ),
-                label: const Text("Pick from gallery"),
+                label: Text(
+                  tr('app.gallery.imagePicker'),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.inverseSurface,
+                  ),
+                ),
               ),
             ],
           ),
@@ -122,8 +133,12 @@ class _GalleryScreenState extends State<GalleryScreen> {
             children: [
               if (imagePath != null) Image.file(File(imagePath!)),
               if (image == null)
-                const Text("Take a photo or choose one from the gallery to "
-                    "inference."),
+                Text(
+                  tr('app.gallery.title'),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.inverseSurface,
+                  ),
+                ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -163,7 +178,6 @@ class _GalleryScreenState extends State<GalleryScreen> {
                               .map(
                                 (e) => Container(
                                   padding: const EdgeInsets.all(8),
-                                  color: Colors.white,
                                   child: Row(
                                     children: [
                                       Text(e.key),

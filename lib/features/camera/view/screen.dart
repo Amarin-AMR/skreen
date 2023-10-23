@@ -131,7 +131,7 @@ class CameraScreenState extends State<CameraScreen>
                   .map(
                     (e) => Container(
                       padding: const EdgeInsets.all(8),
-                      color: Colors.white,
+                      color: Colors.black,
                       child: Row(
                         children: [
                           Text(e.key),

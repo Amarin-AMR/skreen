@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:skreen/features/camera/view/screen.dart';
@@ -54,21 +55,44 @@ class _BottomNavigationBarAppState extends State<BottomNavigationBarApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('test'),
+        title: Text(
+          tr('app.title'),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.inverseSurface,
+          ),
+        ),
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: TextButton(
+              child: Text(
+                tr('app.changeLang'),
+                style: const TextStyle(color: Colors.white),
+              ),
+              onPressed: () => setState(() {
+                if (context.locale.languageCode == 'en') {
+                  context.setLocale(const Locale('th'));
+                } else {
+                  context.setLocale(const Locale('en'));
+                }
+              }),
+            ),
+          ),
+        ],
         backgroundColor: Colors.black.withOpacity(0.5),
       ),
       body: Center(
         child: _widgetOptions?.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.image),
-            label: 'Gallery screen',
+            icon: const Icon(Icons.image),
+            label: tr('app.bottomNavigation.gallery'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.camera),
-            label: 'Live Camera',
+            icon: const Icon(Icons.camera),
+            label: tr('app.bottomNavigation.camera'),
           ),
         ],
         currentIndex: _selectedIndex,

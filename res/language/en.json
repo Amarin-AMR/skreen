@@ -1,0 +1,15 @@
+{
+    "app": {
+        "title": "Skeen",
+        "changeLang": "Change Language",
+        "bottomNavigation": {
+            "gallery": "Gallery Screen",
+            "camera": "Live Camera"
+        },
+        "gallery": {
+            "photo": "Take a photo",
+            "imagePicker": "Pick from gallery",
+            "title": "Take a photo or choose one from the gallery to screen diseases."
+        }
+    }
+}
