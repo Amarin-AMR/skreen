@@ -17,9 +17,8 @@
 import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:image/image.dart' as img;
-import 'package:image_picker/image_picker.dart';
-import 'package:skreen/util/image_classification/image_classification_helper.dart';
+import 'package:skreen/base/base_screen.dart';
+import 'package:skreen/features/gallery/viewmodel.dart';
 
 class GalleryScreen extends StatefulWidget {
   const GalleryScreen({super.key});
@@ -29,173 +28,134 @@ class GalleryScreen extends StatefulWidget {
 }
 
 class _GalleryScreenState extends State<GalleryScreen> {
-  ImageClassificationHelper? imageClassificationHelper;
-  final imagePicker = ImagePicker();
-  String? imagePath;
-  img.Image? image;
-  Map<String, double>? classification;
-  bool cameraIsAvailable = Platform.isAndroid || Platform.isIOS;
-
-  @override
-  void initState() {
-    imageClassificationHelper = ImageClassificationHelper();
-    imageClassificationHelper!.initHelper();
-    super.initState();
-  }
-
-  // Clean old results when press some take picture button
-  void cleanResult() {
-    imagePath = null;
-    image = null;
-    classification = null;
-    setState(() {});
-  }
-
-  // Process picked image
-  Future<void> processImage() async {
-    if (imagePath != null) {
-      // Read image bytes from file
-      final imageData = File(imagePath!).readAsBytesSync();
-
-      // Decode image using package:image/image.dart (https://pub.dev/image)
-      image = img.decodeImage(imageData);
-      setState(() {});
-      classification = await imageClassificationHelper?.inferenceImage(image!);
-      setState(() {});
-    }
-  }
-
-  @override
-  void dispose() {
-    imageClassificationHelper?.close();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              if (cameraIsAvailable)
-                TextButton.icon(
-                  onPressed: () async {
-                    cleanResult();
-                    final result = await imagePicker.pickImage(
-                      source: ImageSource.camera,
-                    );
-
-                    imagePath = result?.path;
-                    setState(() {});
-                    processImage();
-                  },
-                  icon: const Icon(
-                    Icons.camera,
-                    size: 48,
+    return BaseScreen(
+      viewmodel: GalleryScreenViewModel(context: context),
+      onInit: (model) => model.initImageHelper(),
+      onDispose: (model) => model.disposeImageHelper(),
+      builder: ((context, model, child) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(
+              tr('app.title'),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.inverseSurface,
+              ),
+            ),
+            actions: <Widget>[
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: TextButton(
+                  child: Text(
+                    tr('app.changeLang'),
+                    style: const TextStyle(color: Colors.white),
                   ),
-                  label: Text(
-                    tr('app.gallery.photo'),
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.inverseSurface,
-                    ),
-                  ),
-                ),
-              TextButton.icon(
-                onPressed: () async {
-                  cleanResult();
-                  final result = await imagePicker.pickImage(
-                    source: ImageSource.gallery,
-                  );
-
-                  imagePath = result?.path;
-                  setState(() {});
-                  processImage();
-                },
-                icon: const Icon(
-                  Icons.photo,
-                  size: 48,
-                ),
-                label: Text(
-                  tr('app.gallery.imagePicker'),
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.inverseSurface,
-                  ),
+                  onPressed: () => setState(() {
+                    if (context.locale.languageCode == 'en') {
+                      context.setLocale(const Locale('th'));
+                    } else {
+                      context.setLocale(const Locale('en'));
+                    }
+                  }),
                 ),
               ),
             ],
+            backgroundColor: Colors.black.withOpacity(0.5),
           ),
-          const Divider(color: Colors.black),
-          Expanded(
-              child: Stack(
-            alignment: Alignment.center,
-            children: [
-              if (imagePath != null) Image.file(File(imagePath!)),
-              if (image == null)
-                Text(
-                  tr('app.gallery.title'),
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.inverseSurface,
-                  ),
-                ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Row(),
-                  if (image != null) ...[
-                    // Show model information
-
-                    if (imageClassificationHelper?.inputTensor != null)
-                      Text(
-                        'Input: (shape: ${imageClassificationHelper?.inputTensor.shape} type: '
-                        '${imageClassificationHelper?.inputTensor.type})',
+          body: SafeArea(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    if (model.cameraIsAvailable)
+                      TextButton.icon(
+                        onPressed: () async {
+                          await model.takePicture();
+                        },
+                        icon: const Icon(
+                          Icons.camera,
+                          size: 48,
+                        ),
+                        label: Text(
+                          tr('app.gallery.photo'),
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.inverseSurface,
+                          ),
+                        ),
                       ),
-                    if (imageClassificationHelper?.outputTensor != null)
-                      Text(
-                        'Output: (shape: ${imageClassificationHelper?.outputTensor.shape} '
-                        'type: ${imageClassificationHelper?.outputTensor.type})',
+                    TextButton.icon(
+                      onPressed: () async {
+                        await model.choosePicture();
+                      },
+                      icon: const Icon(
+                        Icons.photo,
+                        size: 48,
                       ),
-                    const SizedBox(height: 8),
-                    // Show picked image information
-                    Text('Num channels: ${image?.numChannels}'),
-                    Text('Bits per channel: ${image?.bitsPerChannel}'),
-                    Text('Height: ${image?.height}'),
-                    Text('Width: ${image?.width}'),
+                      label: Text(
+                        tr('app.gallery.imagePicker'),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.inverseSurface,
+                        ),
+                      ),
+                    ),
                   ],
-                  const Spacer(),
-                  // Show classification result
-                  SingleChildScrollView(
-                    child: Column(
+                ),
+                const Divider(color: Colors.black),
+                Expanded(
+                    child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    if (model.imagePath != null)
+                      Image.file(
+                        File(model.imagePath!),
+                      ),
+                    if (model.image == null)
+                      Text(
+                        tr('app.gallery.title'),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.inverseSurface,
+                        ),
+                      ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (classification != null)
-                          ...(classification!.entries.toList()
-                                ..sort(
-                                  (a, b) => a.value.compareTo(b.value),
-                                ))
-                              .reversed
-                              .take(3)
-                              .map(
-                                (e) => Container(
-                                  padding: const EdgeInsets.all(8),
-                                  child: Row(
-                                    children: [
-                                      Text(e.key),
-                                      const Spacer(),
-                                      Text(e.value.toStringAsFixed(2))
-                                    ],
-                                  ),
-                                ),
-                              ),
+                        // Show classification result
+                        SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              if (model.classification != null)
+                                ...(model.classification!.entries.toList()
+                                      ..sort(
+                                        (a, b) => a.value.compareTo(b.value),
+                                      ))
+                                    .reversed
+                                    .take(4)
+                                    .map(
+                                      (e) => Container(
+                                        padding: const EdgeInsets.all(8),
+                                        child: Row(
+                                          children: [
+                                            Text(e.key),
+                                            const Spacer(),
+                                            Text(e.value.toStringAsFixed(6))
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
-                  ),
-                ],
-              ),
-            ],
-          )),
-        ],
-      ),
+                  ],
+                )),
+              ],
+            ),
+          ),
+        );
+      }),
     );
   }
 }

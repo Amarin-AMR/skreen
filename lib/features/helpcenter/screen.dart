@@ -4,14 +4,14 @@ import 'package:skreen/features/gallery/screen.dart';
 
 import 'package:skreen/model/cardmodel/items.dart';
 
-class Intro extends StatefulWidget {
-  const Intro({super.key});
+class HelpCenterScreen extends StatefulWidget {
+  const HelpCenterScreen({super.key});
 
   @override
-  IntroState createState() => IntroState();
+  HelpCenterScreenState createState() => HelpCenterScreenState();
 }
 
-class IntroState extends State<Intro> {
+class HelpCenterScreenState extends State<HelpCenterScreen> {
   List<Widget> slides = items
       .map((item) => Container(
           padding: const EdgeInsets.symmetric(horizontal: 18.0),
@@ -89,66 +89,64 @@ class IntroState extends State<Intro> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: Stack(
-          children: <Widget>[
-            PageView.builder(
-              controller: _pageViewController,
-              itemCount: slides.length,
-              itemBuilder: (BuildContext context, int index) {
-                return slides[index];
+      body: Stack(
+        children: <Widget>[
+          PageView.builder(
+            controller: _pageViewController,
+            itemCount: slides.length,
+            itemBuilder: (BuildContext context, int index) {
+              return slides[index];
+            },
+          ),
+          Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                margin: const EdgeInsets.only(top: 70.0),
+                padding: const EdgeInsets.symmetric(vertical: 40.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: indicator(),
+                ),
+              )
+              //  ),
+              ),
+          // )
+          Container(
+            alignment: Alignment.bottomCenter,
+            margin: const EdgeInsets.only(bottom: 60),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  backgroundColor: Colors.orange),
+              child: const Text('Begin'),
+              onPressed: () async {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const GalleryScreen(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      const begin = Offset(0.0, 1.0);
+                      const end = Offset.zero;
+                      const curve = Curves.ease;
+
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+
+                      return SlideTransition(
+                        position: animation.drive(tween),
+                        child: child,
+                      );
+                    },
+                  ),
+                );
               },
             ),
-            Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  margin: const EdgeInsets.only(top: 70.0),
-                  padding: const EdgeInsets.symmetric(vertical: 40.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: indicator(),
-                  ),
-                )
-                //  ),
-                ),
-            // )
-            Container(
-              alignment: Alignment.bottomCenter,
-              margin: const EdgeInsets.only(bottom: 60),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                    backgroundColor: Colors.orange),
-                child: const Text('Begin'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          const GalleryScreen(),
-                      transitionsBuilder:
-                          (context, animation, secondaryAnimation, child) {
-                        const begin = Offset(0.0, 1.0);
-                        const end = Offset.zero;
-                        const curve = Curves.ease;
-
-                        var tween = Tween(begin: begin, end: end)
-                            .chain(CurveTween(curve: curve));
-
-                        return SlideTransition(
-                          position: animation.drive(tween),
-                          child: child,
-                        );
-                      },
-                    ),
-                  );
-                },
-              ),
-            )
-          ],
-        ),
+          )
+        ],
       ),
     );
   }

@@ -1,3 +1,27 @@
+import 'package:json_annotation/json_annotation.dart';
+import 'package:skreen/model/cardmodel/card_info.dart';
+
+part 'card_data.g.dart';
+
+@JsonSerializable()
+class CardDataResponse {
+  @JsonKey(name: 'name')
+  String? name;
+
+  @JsonKey(name: 'list', defaultValue: [])
+  List<CardInfoResponse>? list;
+
+  CardDataResponse({
+    this.name,
+    this.list,
+  });
+
+  factory CardDataResponse.fromJson(Map<String, dynamic> json) =>
+      _$CardDataResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CardDataResponseToJson(this);
+}
+
 //Dermatofibroma (df)
 List related = [
   {

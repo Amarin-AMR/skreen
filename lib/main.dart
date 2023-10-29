@@ -4,8 +4,11 @@ import 'package:provider/provider.dart';
 
 import 'package:skreen/constants/theme.dart';
 
-import 'package:skreen/features/bottom_navigation/viewmodel.dart';
+import 'package:skreen/features/gallery/screen.dart';
+import 'package:skreen/features/gallery/viewmodel.dart';
 import 'package:skreen/features/helpcenter/screen.dart';
+import 'package:skreen/features/helpcenter/viewmodel.dart';
+import 'package:skreen/features/map/viewmodel.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +31,11 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-            create: (_) => BottomNavigationViewModel(context: context)),
+            create: (_) => GalleryScreenViewModel(context: context)),
+        ChangeNotifierProvider(
+            create: (_) => HelpCenterScreenViewModel(context: context)),
+        ChangeNotifierProvider(
+            create: (_) => MapScreenViewModel(context: context))
       ],
       child: MaterialApp(
         localizationsDelegates: context.localizationDelegates,
@@ -37,7 +44,7 @@ class MyApp extends StatelessWidget {
         themeMode: ThemeMode.system,
         theme: ThemeClass.darkTheme,
         darkTheme: ThemeClass.darkTheme,
-        home: const Intro(),
+        home: const GalleryScreen(),
       ),
     );
   }

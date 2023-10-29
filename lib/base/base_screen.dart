@@ -13,13 +13,14 @@ class BaseScreen<T extends ChangeNotifier> extends StatefulWidget {
 
   final T viewmodel;
   final Widget? child;
-
-  final VoidCallback? onDispose;
+  final void Function(T model)? onInit;
+  final void Function(T model)? onDispose;
 
   const BaseScreen({
     required this.builder,
     required this.viewmodel,
     this.child,
+    this.onInit,
     this.onDispose,
     Key? key,
   }) : super(key: key);
@@ -35,13 +36,17 @@ class BaseScreenState<T extends ChangeNotifier> extends State<BaseScreen<T>> {
   void initState() {
     viewmodel = widget.viewmodel;
 
+    if (widget.onInit != null) {
+      widget.onInit!(viewmodel);
+    }
+
     super.initState();
   }
 
   @override
   void dispose() {
     if (widget.onDispose != null) {
-      widget.onDispose!();
+      widget.onDispose!(viewmodel);
     }
     super.dispose();
   }
