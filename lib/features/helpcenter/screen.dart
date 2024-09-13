@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'package:skreen/features/gallery/screen.dart';
+import 'package:skreen/features/bottombar/screen.dart';
 
 import 'package:skreen/model/cardmodel/items.dart';
 
@@ -61,17 +60,19 @@ class HelpCenterScreenState extends State<HelpCenterScreen> {
       .toList();
 
   List<Widget> indicator() => List<Widget>.generate(
-      slides.length,
-      (index) => Container(
-            margin: const EdgeInsets.symmetric(horizontal: 3.0),
-            height: 10.0,
-            width: 10.0,
-            decoration: BoxDecoration(
-                color: currentPage.round() == index
-                    ? const Color(0XFF256075)
-                    : const Color(0XFF256075).withOpacity(0.2),
-                borderRadius: BorderRadius.circular(10.0)),
-          ));
+        slides.length,
+        (index) => Container(
+          margin: const EdgeInsets.symmetric(horizontal: 3.0),
+          height: 10.0,
+          width: 10.0,
+          decoration: BoxDecoration(
+            color: currentPage.round() == index
+                ? const Color(0XFF256075)
+                : const Color(0XFF256075).withOpacity(0.2),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ),
+      );
 
   double currentPage = 0.0;
   final _pageViewController = PageController();
@@ -89,64 +90,66 @@ class HelpCenterScreenState extends State<HelpCenterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          PageView.builder(
-            controller: _pageViewController,
-            itemCount: slides.length,
-            itemBuilder: (BuildContext context, int index) {
-              return slides[index];
-            },
-          ),
-          Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                margin: const EdgeInsets.only(top: 70.0),
-                padding: const EdgeInsets.symmetric(vertical: 40.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: indicator(),
-                ),
-              )
-              //  ),
-              ),
-          // )
-          Container(
-            alignment: Alignment.bottomCenter,
-            margin: const EdgeInsets.only(bottom: 60),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                  backgroundColor: Colors.orange),
-              child: const Text('Begin'),
-              onPressed: () async {
-                Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        const GalleryScreen(),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                      const begin = Offset(0.0, 1.0);
-                      const end = Offset.zero;
-                      const curve = Curves.ease;
-
-                      var tween = Tween(begin: begin, end: end)
-                          .chain(CurveTween(curve: curve));
-
-                      return SlideTransition(
-                        position: animation.drive(tween),
-                        child: child,
-                      );
-                    },
-                  ),
-                );
+      body: SafeArea(
+        child: Stack(
+          children: <Widget>[
+            PageView.builder(
+              controller: _pageViewController,
+              itemCount: slides.length,
+              itemBuilder: (BuildContext context, int index) {
+                return slides[index];
               },
             ),
-          )
-        ],
+            Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  margin: const EdgeInsets.only(top: 70.0),
+                  padding: const EdgeInsets.symmetric(vertical: 40.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: indicator(),
+                  ),
+                )
+                //  ),
+                ),
+            // )
+            Container(
+              alignment: Alignment.bottomCenter,
+              margin: const EdgeInsets.only(bottom: 60),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    backgroundColor: Colors.orange),
+                child: const Text('Begin'),
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const BottomNavigationBarExample(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        const begin = Offset(0.0, 1.0);
+                        const end = Offset.zero;
+                        const curve = Curves.ease;
+
+                        var tween = Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: curve));
+
+                        return SlideTransition(
+                          position: animation.drive(tween),
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
