@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:skreen/features/bottombar/screen.dart';
+import 'package:skreen/features/helpcenter/screen.dart';
 
 import 'navigation_constants.dart';
 
@@ -11,18 +13,18 @@ class NavigationRoute {
     if (settings.name == null) return null;
     final uri = Uri.parse(settings.name!);
     switch (uri.path) {
-      // case AppNavConstants.DEFALT:
-      //   return normalNavigate(
-      //     const SplashScreen(),
-      //     AppNavConstants.DEFALT,
-      //     settings.arguments,
-      //   );
-      // case AppNavConstants.LOGIN:
-      //   return normalNavigate(
-      //     const LogInScreen(),
-      //     AppNavConstants.LOGIN,
-      //     settings.arguments,
-      //   );
+      case AppNavConstants.DEFALT:
+        return normalNavigate(
+          const HelpCenterScreen(),
+          AppNavConstants.DEFALT,
+          settings.arguments,
+        );
+      case AppNavConstants.BOTTOMAPPBAR:
+        return normalNavigate(
+          const BottomBarScreen(),
+          AppNavConstants.BOTTOMAPPBAR,
+          settings.arguments,
+        );
       // case AppNavConstants.SPLASH:
       //   return normalNavigate(
       //     const SplashScreen(),

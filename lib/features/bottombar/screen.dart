@@ -4,16 +4,14 @@ import 'package:skreen/features/bottombar/viewmodel.dart';
 import 'package:skreen/features/gallery/screen.dart';
 import 'package:skreen/features/map/screen.dart';
 
-class BottomNavigationBarExample extends StatefulWidget {
-  const BottomNavigationBarExample({super.key});
+class BottomBarScreen extends StatefulWidget {
+  const BottomBarScreen({super.key});
 
   @override
-  BottomNavigationBarExampleState createState() =>
-      BottomNavigationBarExampleState();
+  BottomBarScreenState createState() => BottomBarScreenState();
 }
 
-class BottomNavigationBarExampleState
-    extends State<BottomNavigationBarExample> {
+class BottomBarScreenState extends State<BottomBarScreen> {
   var currentTab = [
     const GalleryScreen(),
     const MapScreen(),

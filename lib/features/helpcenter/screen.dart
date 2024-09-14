@@ -3,6 +3,8 @@ import 'package:skreen/base/base_screen.dart';
 import 'package:skreen/features/bottombar/screen.dart';
 
 import 'package:skreen/features/helpcenter/viewmodel.dart';
+import 'package:skreen/navigation/navigation_constants.dart';
+import 'package:skreen/navigation/route_manager.dart';
 
 class HelpCenterScreen extends StatelessWidget {
   const HelpCenterScreen({super.key});
@@ -49,28 +51,30 @@ class HelpCenterScreen extends StatelessWidget {
                     ),
                     child: const Text('Begin'),
                     onPressed: () async {
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  const BottomNavigationBarExample(),
-                          transitionsBuilder:
-                              (context, animation, secondaryAnimation, child) {
-                            const begin = Offset(0.0, 1.0);
-                            const end = Offset.zero;
-                            const curve = Curves.ease;
+                      AppNav.toNamed(context, AppNavConstants.BOTTOMAPPBAR);
 
-                            var tween = Tween(begin: begin, end: end)
-                                .chain(CurveTween(curve: curve));
+                      // Navigator.push(
+                      //   context,
+                      //   PageRouteBuilder(
+                      //     pageBuilder:
+                      //         (context, animation, secondaryAnimation) =>
+                      //              const BottomAppBar(),
+                      //     transitionsBuilder:
+                      //         (context, animation, secondaryAnimation, child) {
+                      //       const begin = Offset(0.0, 1.0);
+                      //       const end = Offset.zero;
+                      //       const curve = Curves.ease;
 
-                            return SlideTransition(
-                              position: animation.drive(tween),
-                              child: child,
-                            );
-                          },
-                        ),
-                      );
+                      //       var tween = Tween(begin: begin, end: end)
+                      //           .chain(CurveTween(curve: curve));
+
+                      //       return SlideTransition(
+                      //         position: animation.drive(tween),
+                      //         child: child,
+                      //       );
+                      //     },
+                      //   ),
+                      // );
                     },
                   ),
                 ),

@@ -6,9 +6,9 @@ import 'package:skreen/constants/theme.dart';
 import 'package:skreen/features/bottombar/viewmodel.dart';
 
 import 'package:skreen/features/gallery/viewmodel.dart';
-import 'package:skreen/features/helpcenter/screen.dart';
 import 'package:skreen/features/helpcenter/viewmodel.dart';
 import 'package:skreen/features/map/viewmodel.dart';
+import 'package:skreen/navigation/navigation_route.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +23,8 @@ Future<void> main() async {
   );
 }
 
+final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -34,7 +36,7 @@ class MyApp extends StatelessWidget {
           create: (_) => GalleryScreenViewModel(context: context),
         ),
         ChangeNotifierProvider(
-          create: (_) => HelpCenterScreenViewModel(context: context),
+          create: (_) => HelpCenterViewModel(),
         ),
         ChangeNotifierProvider(
           create: (_) => MapScreenViewModel(context: context),
@@ -50,7 +52,8 @@ class MyApp extends StatelessWidget {
         themeMode: ThemeMode.system,
         theme: ThemeClass.darkTheme,
         darkTheme: ThemeClass.darkTheme,
-        home: const HelpCenterScreen(),
+        navigatorKey: _navigatorKey,
+        onGenerateRoute: NavigationRoute.instance.generateRoute,
       ),
     );
   }
